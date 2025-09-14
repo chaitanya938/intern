@@ -4,9 +4,18 @@ const path = require('path');
 console.log('Setting up frontend for Render deployment...');
 
 // Create the expected directory structure
-const srcDir = path.join(__dirname, 'src');
-const clientDir = path.join(__dirname, 'client');
+// If we're already in src directory, go up one level
+const isInSrcDir = __dirname.endsWith('/src') || __dirname.endsWith('\\src');
+const projectRoot = isInSrcDir ? path.join(__dirname, '..') : __dirname;
+
+const srcDir = path.join(projectRoot, 'src');
+const clientDir = path.join(projectRoot, 'client');
 const expectedDir = path.join(srcDir, 'client');
+
+console.log('Project root:', projectRoot);
+console.log('Source directory:', srcDir);
+console.log('Client directory:', clientDir);
+console.log('Expected directory:', expectedDir);
 
 // Create src directory if it doesn't exist
 if (!fs.existsSync(srcDir)) {
