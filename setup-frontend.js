@@ -5,12 +5,27 @@ console.log('Setting up frontend for Render deployment...');
 console.log('Current working directory:', process.cwd());
 console.log('__dirname:', __dirname);
 
-// Find the project root by looking for package.json
+// Find the project root by looking for package.json with specific content
 let projectRoot = __dirname;
 while (projectRoot !== '/' && projectRoot !== '\\') {
-  if (fs.existsSync(path.join(projectRoot, 'package.json'))) {
-    break;
+  const packageJsonPath = path.join(projectRoot, 'package.json');
+  if (fs.existsSync(packageJsonPath)) {
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+      // Look for the main project package.json (not a sub-project)
+      if (packageJson.name === 'multi-tenant-notes-app' || 
+          (packageJson.scripts && packageJson.scripts.dev && packageJson.scripts.server)) {
+        break;
+      }
+    } catch (e) {
+      // If we can't parse the package.json, continue searching
+    }
   }
+  projectRoot = path.dirname(projectRoot);
+}
+
+// If we still haven't found the right root, try going up one more level
+if (!fs.existsSync(path.join(projectRoot, 'client'))) {
   projectRoot = path.dirname(projectRoot);
 }
 
