@@ -1,0 +1,5 @@
+[33me638ab1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m Fix frontend: Use type static instead of type web with env static
+[33mf4a130f[m Fix frontend build: Remove rootDir and fix build paths
+[33m377c5ee[m Fix render.yaml: Use existing MongoDB instead of creating new database
+[33ma23cdc9[m Fix render.yaml: Use type web with env static for Blueprint compatibility
+[33mfc33de0[m Fix render.yaml: Change frontend type from web to static
