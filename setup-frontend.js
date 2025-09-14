@@ -33,11 +33,9 @@ if (!clientDir) {
   process.exit(1);
 }
 
-// Create the expected structure
-const srcDir = path.join(__dirname, '..');
-const expectedDir = path.join(srcDir, 'client');
+// Create the expected structure - copy to src/client (same level as setup script)
+const expectedDir = path.join(__dirname, 'client');
 
-console.log('Source directory:', srcDir);
 console.log('Expected directory:', expectedDir);
 
 // Remove existing src/client if it exists
