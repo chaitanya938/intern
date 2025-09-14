@@ -5,49 +5,37 @@ console.log('Setting up frontend for Render deployment...');
 console.log('Current working directory:', process.cwd());
 console.log('__dirname:', __dirname);
 
-// Find the project root by looking for package.json with specific content
-let projectRoot = __dirname;
-while (projectRoot !== '/' && projectRoot !== '\\') {
-  const packageJsonPath = path.join(projectRoot, 'package.json');
-  if (fs.existsSync(packageJsonPath)) {
-    try {
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-      // Look for the main project package.json (not a sub-project)
-      if (packageJson.name === 'multi-tenant-notes-app' || 
-          (packageJson.scripts && packageJson.scripts.dev && packageJson.scripts.server)) {
-        break;
-      }
-    } catch (e) {
-      // If we can't parse the package.json, continue searching
-    }
+// Simple approach: try multiple possible locations for the client directory
+const possibleClientDirs = [
+  path.join(__dirname, '..', 'client'),  // Go up one level from src
+  path.join(__dirname, '..', '..', 'client'),  // Go up two levels
+  path.join(process.cwd(), 'client'),  // From current working directory
+  path.join(process.cwd(), '..', 'client'),  // Up one from current working directory
+];
+
+let clientDir = null;
+for (const dir of possibleClientDirs) {
+  console.log('Checking for client directory at:', dir);
+  if (fs.existsSync(dir) && fs.existsSync(path.join(dir, 'package.json'))) {
+    clientDir = dir;
+    console.log('✅ Found client directory at:', dir);
+    break;
   }
-  projectRoot = path.dirname(projectRoot);
 }
 
-// If we still haven't found the right root, try going up one more level
-if (!fs.existsSync(path.join(projectRoot, 'client'))) {
-  projectRoot = path.dirname(projectRoot);
-}
-
-console.log('Project root found at:', projectRoot);
-
-const clientDir = path.join(projectRoot, 'client');
-const srcDir = path.join(projectRoot, 'src');
-const expectedDir = path.join(srcDir, 'client');
-
-console.log('Client directory:', clientDir);
-console.log('Client directory exists:', fs.existsSync(clientDir));
-
-if (!fs.existsSync(clientDir)) {
-  console.error('❌ Client directory not found at:', clientDir);
-  console.log('Available files in project root:', fs.readdirSync(projectRoot));
+if (!clientDir) {
+  console.error('❌ Client directory not found in any expected location');
+  console.log('Available files in current directory:', fs.readdirSync(process.cwd()));
+  console.log('Available files in __dirname:', fs.readdirSync(__dirname));
   process.exit(1);
 }
 
-// Create src directory if it doesn't exist
-if (!fs.existsSync(srcDir)) {
-  fs.mkdirSync(srcDir, { recursive: true });
-}
+// Create the expected structure
+const srcDir = path.join(__dirname, '..');
+const expectedDir = path.join(srcDir, 'client');
+
+console.log('Source directory:', srcDir);
+console.log('Expected directory:', expectedDir);
 
 // Remove existing src/client if it exists
 if (fs.existsSync(expectedDir)) {
