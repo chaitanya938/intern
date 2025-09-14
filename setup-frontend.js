@@ -13,21 +13,15 @@ if (!fs.existsSync(srcDir)) {
   fs.mkdirSync(srcDir, { recursive: true });
 }
 
-// Create symbolic link or copy client to src/client
-if (!fs.existsSync(expectedDir)) {
-  try {
-    // Try to create a symbolic link first (works on Unix systems)
-    fs.symlinkSync(clientDir, expectedDir, 'dir');
-    console.log('✅ Created symbolic link: src/client -> client');
-  } catch (error) {
-    // If symbolic link fails, copy the directory
-    console.log('Creating copy instead of symbolic link...');
-    copyDir(clientDir, expectedDir);
-    console.log('✅ Copied client directory to src/client');
-  }
-} else {
-  console.log('✅ src/client directory already exists');
+// Always copy the directory (more reliable than symbolic links)
+if (fs.existsSync(expectedDir)) {
+  console.log('Removing existing src/client directory...');
+  fs.rmSync(expectedDir, { recursive: true, force: true });
 }
+
+console.log('Copying client directory to src/client...');
+copyDir(clientDir, expectedDir);
+console.log('✅ Copied client directory to src/client');
 
 // Verify the setup
 console.log('Verifying setup...');
