@@ -2,27 +2,39 @@ const fs = require('fs');
 const path = require('path');
 
 console.log('Setting up frontend for Render deployment...');
+console.log('Current working directory:', process.cwd());
+console.log('__dirname:', __dirname);
 
-// Create the expected directory structure
-// If we're already in src directory, go up one level
-const isInSrcDir = __dirname.endsWith('/src') || __dirname.endsWith('\\src');
-const projectRoot = isInSrcDir ? path.join(__dirname, '..') : __dirname;
+// Find the project root by looking for package.json
+let projectRoot = __dirname;
+while (projectRoot !== '/' && projectRoot !== '\\') {
+  if (fs.existsSync(path.join(projectRoot, 'package.json'))) {
+    break;
+  }
+  projectRoot = path.dirname(projectRoot);
+}
 
-const srcDir = path.join(projectRoot, 'src');
+console.log('Project root found at:', projectRoot);
+
 const clientDir = path.join(projectRoot, 'client');
+const srcDir = path.join(projectRoot, 'src');
 const expectedDir = path.join(srcDir, 'client');
 
-console.log('Project root:', projectRoot);
-console.log('Source directory:', srcDir);
 console.log('Client directory:', clientDir);
-console.log('Expected directory:', expectedDir);
+console.log('Client directory exists:', fs.existsSync(clientDir));
+
+if (!fs.existsSync(clientDir)) {
+  console.error('❌ Client directory not found at:', clientDir);
+  console.log('Available files in project root:', fs.readdirSync(projectRoot));
+  process.exit(1);
+}
 
 // Create src directory if it doesn't exist
 if (!fs.existsSync(srcDir)) {
   fs.mkdirSync(srcDir, { recursive: true });
 }
 
-// Always copy the directory (more reliable than symbolic links)
+// Remove existing src/client if it exists
 if (fs.existsSync(expectedDir)) {
   console.log('Removing existing src/client directory...');
   fs.rmSync(expectedDir, { recursive: true, force: true });
@@ -46,9 +58,6 @@ if (fs.existsSync(publicDir)) {
 } else {
   console.log('❌ Public directory not found!');
 }
-
-console.log('Current working directory:', process.cwd());
-console.log('__dirname:', __dirname);
 
 function copyDir(src, dest) {
   if (!fs.existsSync(dest)) {
