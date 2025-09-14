@@ -9,9 +9,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        fromDatabase:
-          name: notes-app-db
-          property: connectionString
+        value: mongodb+srv://gnanavardhini2_db_user:gnanavardhini@internshalassignment.ed9vdpa.mongodb.net/?retryWrites=true&w=majority&appName=Internshalassignment
       - key: JWT_SECRET
         generateValue: true
       - key: PORT
@@ -30,6 +28,6 @@ services:
           name: notes-app-backend
           property: host
 
-databases:
-  - name: notes-app-db
-    plan: free
+# databases:
+  # - name: notes-app-db
+  #   plan: free
