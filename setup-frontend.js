@@ -29,6 +29,24 @@ if (!fs.existsSync(expectedDir)) {
   console.log('✅ src/client directory already exists');
 }
 
+// Verify the setup
+console.log('Verifying setup...');
+const publicDir = path.join(expectedDir, 'public');
+const indexPath = path.join(publicDir, 'index.html');
+
+console.log('Checking for public directory:', publicDir);
+console.log('Public directory exists:', fs.existsSync(publicDir));
+
+if (fs.existsSync(publicDir)) {
+  console.log('Contents of public directory:', fs.readdirSync(publicDir));
+  console.log('index.html exists:', fs.existsSync(indexPath));
+} else {
+  console.log('❌ Public directory not found!');
+}
+
+console.log('Current working directory:', process.cwd());
+console.log('__dirname:', __dirname);
+
 function copyDir(src, dest) {
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(dest, { recursive: true });
