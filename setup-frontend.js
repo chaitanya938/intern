@@ -13,12 +13,8 @@ const possibleClientDirs = [
   path.join(process.cwd(), '..', 'client'),  // Up one from current working directory
 ];
 
-// Filter out any paths that are inside src directory (these are wrong)
-const filteredClientDirs = possibleClientDirs.filter(dir => {
-  const normalizedDir = path.normalize(dir);
-  const normalizedSrc = path.normalize(path.join(__dirname, '..'));
-  return !normalizedDir.startsWith(normalizedSrc);
-});
+// Use the original possible directories without filtering
+const filteredClientDirs = possibleClientDirs;
 
 let clientDir = null;
 for (const dir of filteredClientDirs) {
