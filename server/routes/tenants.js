@@ -26,7 +26,7 @@ router.post('/:slug/upgrade', [auth, requireRole(['admin'])], async (req, res) =
     await tenant.save();
 
     res.json({ 
-      message: 'Tenant upgraded to Pro plan successfully',
+      message: 'Successfully upgraded to Pro plan',
       tenant: {
         id: tenant._id,
         name: tenant.name,

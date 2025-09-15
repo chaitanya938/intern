@@ -55,7 +55,7 @@ router.post('/register', [
     const user = new User({
       email,
       password,
-      role: 'user',
+      role: 'member',
       tenant: tenantDoc._id
     });
 

@@ -56,8 +56,8 @@ const NotesList = ({ showCreateForm: initialShowCreateForm = false }) => {
       setShowCreateForm(false);
       setUpgradeMessage('');
     } catch (error) {
-      if (error.response?.data?.limitReached) {
-        setUpgradeMessage('Note limit reached. Upgrade to Pro for unlimited notes.');
+      if (error.response?.data?.message?.includes('Free plan limit')) {
+        setUpgradeMessage('Free plan limit reached. Upgrade to Pro for unlimited notes.');
       } else {
         setError('Failed to create note');
       }

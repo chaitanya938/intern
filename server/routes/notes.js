@@ -28,8 +28,9 @@ router.post('/', [
       const noteCount = await Note.countDocuments({ tenant: req.user.tenant });
       if (noteCount >= tenant.noteLimit) {
         return res.status(403).json({ 
-          message: 'Note limit reached. Upgrade to Pro for unlimited notes.',
-          limitReached: true
+          message: 'Free plan limit reached. Upgrade to Pro for unlimited notes.',
+          limit: tenant.noteLimit,
+          current: noteCount
         });
       }
     }
