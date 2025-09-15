@@ -20,12 +20,10 @@ services:
     env: static
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/build
+    
     envVars:
       - key: REACT_APP_API_URL
-        fromService:
-          type: web
-          name: notes-app-backend
-          property: host
+        value: https://notes-app-backend-1m1v.onrender.com
 # databases:
   # - name: notes-app-db
   #   plan: free
