@@ -1,17 +1,12 @@
 #!/bin/bash
 
-echo "Building frontend for Render deployment..."
-echo "Current directory: $(pwd)"
-echo "Available files: $(ls -la)"
+echo "Building frontend with directory fix for Render..."
 
 # Navigate to client directory
-if [ ! -d "client" ]; then
-    echo "❌ Client directory not found in current location"
-    exit 1
-fi
-
 cd client
-echo "Changed to client directory: $(pwd)"
+
+echo "Current directory: $(pwd)"
+echo "Available files: $(ls -la)"
 
 # Check if we're in the right directory
 if [ ! -f "package.json" ]; then
@@ -31,6 +26,14 @@ if [ ! -f "public/index.html" ]; then
 fi
 
 echo "✅ Found package.json and public/index.html"
+
+# Create the expected directory structure that React is looking for
+echo "Creating expected directory structure..."
+mkdir -p src/client
+cp -r public src/client/
+
+echo "Created src/client/public directory"
+echo "Contents of src/client/public: $(ls -la src/client/public/)"
 
 # Install dependencies
 echo "Installing dependencies..."

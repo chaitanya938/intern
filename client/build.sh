@@ -1,26 +1,17 @@
 #!/bin/bash
 
-echo "Building frontend for Render deployment..."
+echo "Building React app for Render deployment..."
 echo "Current directory: $(pwd)"
 echo "Available files: $(ls -la)"
 
-# Navigate to client directory
-if [ ! -d "client" ]; then
-    echo "❌ Client directory not found in current location"
-    exit 1
-fi
-
-cd client
-echo "Changed to client directory: $(pwd)"
-
 # Check if we're in the right directory
 if [ ! -f "package.json" ]; then
-    echo "❌ package.json not found in client directory"
+    echo "❌ package.json not found in current directory"
     exit 1
 fi
 
 if [ ! -d "public" ]; then
-    echo "❌ public directory not found in client directory"
+    echo "❌ public directory not found in current directory"
     exit 1
 fi
 

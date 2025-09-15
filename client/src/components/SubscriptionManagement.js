@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -9,11 +9,7 @@ const SubscriptionManagement = () => {
   const [success, setSuccess] = useState('');
   const { user } = useAuth();
 
-  useEffect(() => {
-    fetchTenantInfo();
-  }, []);
-
-  const fetchTenantInfo = async () => {
+  const fetchTenantInfo = useCallback(async () => {
     try {
       setLoading(true);
       const res = await api.get(`/api/tenants/${user.tenant.slug}`);
@@ -23,7 +19,11 @@ const SubscriptionManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.tenant.slug]);
+
+  useEffect(() => {
+    fetchTenantInfo();
+  }, [fetchTenantInfo]);
 
   const upgradeToPro = async () => {
     try {

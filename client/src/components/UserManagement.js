@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
-import { useAuth } from '../context/AuthContext';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -8,7 +7,6 @@ const UserManagement = () => {
   const [error, setError] = useState('');
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [inviteData, setInviteData] = useState({ email: '', role: 'member' });
-  const { user } = useAuth();
 
   useEffect(() => {
     fetchUsers();
